@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import './navbar.css';
+import './Navbar.css';
 import logo from "../../assets/ic_launcher.png";
 import {Link } from 'react-router-dom';
 
