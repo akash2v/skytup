@@ -1,155 +1,261 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import './BlogPost.css';
 
+const API_ENDPOINT = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+
+const decodeHtmlEntities = (text) => {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+};
+
 const BlogPost = () => {
-  const { id } = useParams();
   
-  // Mock blog post data - in a real app, this would come from an API
-  const blogPost = {
-    id: parseInt(id),
-    title: "Getting Started with Skytup",
-    content: `
-      <p>Welcome to Skytup! This comprehensive guide will help you get started with our platform and make the most of its features.</p>
-      
-      <h2>Creating Your Account</h2>
-      <p>Getting started with Skytup is easy. Simply click the "Sign Up" button in the top right corner of our homepage and follow the registration process. You'll need to provide some basic information and verify your email address.</p>
-      
-      <h2>Exploring the Dashboard</h2>
-      <p>Once you've created your account, you'll be taken to your personal dashboard. Here, you can see an overview of your activity, recent updates, and quick access to all the features Skytup has to offer.</p>
-      
-      <h2>Key Features</h2>
-      <p>Skytup offers a wide range of features to enhance your experience:</p>
-      <ul>
-        <li><strong>Personalized Recommendations:</strong> Get tailored suggestions based on your interests and activity.</li>
-        <li><strong>Advanced Search:</strong> Find exactly what you're looking for with our powerful search functionality.</li>
-        <li><strong>Community Interaction:</strong> Connect with other users, share experiences, and learn from the community.</li>
-        <li><strong>Customizable Settings:</strong> Adjust your preferences to make Skytup work the way you want it to.</li>
-      </ul>
-      
-      <h2>Tips for Success</h2>
-      <p>To get the most out of Skytup, we recommend:</p>
-      <ol>
-        <li>Complete your profile with accurate information</li>
-        <li>Explore different features regularly</li>
-        <li>Engage with the community</li>
-        <li>Check for updates and new features</li>
-      </ol>
-      
-      <h2>Need Help?</h2>
-      <p>If you ever find yourself stuck or have questions, our support team is here to help. You can reach out to us through the contact page or check our FAQ section for quick answers to common questions.</p>
-      
-      <p>We're excited to have you join our community and can't wait to see how you'll use Skytup to achieve your goals!</p>
-    `,
-    category: "tutorials",
-    author: "John Doe",
-    authorRole: "Product Manager",
-    authorImage: "/images/authors/john-doe.jpg",
-    date: "2023-06-15",
-    readTime: "5 min read",
-    image: "/images/blog/getting-started.jpg",
-    tags: ["getting started", "tutorial", "guide", "basics"]
-  };
-  
-  // Mock related posts - in a real app, this would come from an API
-  const relatedPosts = [
-    {
-      id: 6,
-      title: "Tips for Power Users",
-      excerpt: "Advanced techniques and shortcuts to help you become a Skytup power user.",
-      category: "tutorials",
-      image: "/images/blog/power-tips.jpg"
-    },
-    {
-      id: 2,
-      title: "New Features Released",
-      excerpt: "Discover the latest features we've added to improve your experience on Skytup.",
-      category: "updates",
-      image: "/images/blog/new-features.jpg"
-    },
-    {
-      id: 3,
-      title: "Best Practices for Security",
-      excerpt: "Keep your account safe with these essential security tips and best practices.",
-      category: "security",
-      image: "/images/blog/security.jpg"
+  const { alias } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const response = await fetch(`${API_ENDPOINT}/api/blog/${alias}`);
+        const data = await response.json();
+        setBlog(data);
+        setIsLoading(false);
+        
+        // Update view count
+        if (data) {
+          const updateViews = async () => {
+            try {
+              await fetch(`${API_ENDPOINT}/api/blog/view`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: data.id }),
+              });
+            } catch (error) {
+              console.error('Error updating views:', error);
+            }
+          };
+          updateViews();
+        }
+      } catch (error) {
+        console.error('Error fetching blog:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, [alias]);
+
+  const handleLike = async () => {
+    if (!blog || liked) return;
+    try {
+      const response = await fetch(`${API_ENDPOINT}/api/blog/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: blog.id }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setBlog(prev => ({ ...prev, likes: prev.likes + 1 }));
+        setLiked(true);
+      }
+    } catch (error) {
+      console.error('Error liking post:', error);
     }
-  ];
-  
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: blog.title,
+        text: blog.summary,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      // You could add a toast notification here
+    }
+  };
+
+  const getMetaImage = () => {
+    if (!blog) return '';
+    return blog.thumbnail || '/path/to/default-blog-image.jpg';
+  };
+
+  const getFormattedDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        <Helmet>
+          <title>Loading Article... | Skytup Blog</title>
+          <meta name="description" content="Please wait while we load this amazing article for you..." />
+        </Helmet>
+        <div className="blog-post-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading amazing content...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (!blog) {
+    return (
+      <>
+        <Helmet>
+          <title>Article Not Found | Skytup Blog</title>
+          <meta name="description" content="The requested article could not be found. Browse our other articles for great content." />
+        </Helmet>
+        <div className="blog-post-error">
+          <h2>Blog not found</h2>
+          <Link to="/blog" className="back-to-blog">Back to Blog</Link>
+        </div>
+      </>
+    );
+  }
+
+  const metaDescription = blog.summary.length > 160 
+    ? `${blog.summary.substring(0, 157)}...`
+    : blog.summary;
+
   return (
-    <div className="blog-post-container">
-      <div className="blog-post-header" style={{ backgroundImage: `url(${blogPost.image})` }}>
-        <div className="blog-post-header-content">
-          <div className="blog-post-category">{blogPost.category}</div>
-          <h1 className="blog-post-title">{blogPost.title}</h1>
-          <div className="blog-post-meta">
-            <div className="blog-post-author">
-              <img src={blogPost.authorImage} alt={blogPost.author} className="author-image" />
-              <div>
-                <span className="author-name">{blogPost.author}</span>
-                <span className="author-role">{blogPost.authorRole}</span>
+    <>
+        
+      <Helmet>
+        <title>{`${blog.title} | Skytup Blog`}</title>
+        <meta name="description" content={metaDescription} />
+        <meta name="keywords" content={`${blog.category},${blog.tags?.join(',')},skytup,blog,tutorial`} />
+        <meta name="author" content={blog.author || 'Skytup Team'} />
+        <meta name="publish_date" content={blog.date} />
+        
+        {/* OpenGraph tags */}
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={getMetaImage()} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Skytup" />
+        <meta property="og:published_time" content={blog.date} />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog.title} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={getMetaImage()} />
+        <meta name="twitter:label1" content="Written by" />
+        <meta name="twitter:data1" content={blog.author || 'Skytup Team'} />
+        <meta name="twitter:label2" content="Published on" />
+        <meta name="twitter:data2" content={getFormattedDate(blog.date)} />
+        
+        {/* Article specific meta tags */}
+        <meta property="article:published_time" content={blog.date} />
+        <meta property="article:section" content={blog.category} />
+        {blog.tags?.map(tag => (
+          <meta property="article:tag" content={tag} key={tag} />
+        ))}
+
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": blog.title,
+            "image": getMetaImage(),
+            "datePublished": blog.date,
+            "dateModified": blog.updatedAt || blog.date,
+            "author": {
+              "@type": "Organization",
+              "name": blog.author || "Skytup Team"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Skytup",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://skytup.com/logo.png"
+              }
+            },
+            "description": metaDescription
+          })}
+        </script>
+      </Helmet>
+      
+      <div className="blog-post-container">
+        <div className="blog-post-header" style={{ backgroundImage: `url(${blog.thumbnail})` }}>
+          <div className="blog-post-header-overlay">
+            <div className="blog-post-header-content">
+              <div className="blog-post-category">{blog.category}</div>
+              <h1 className="blog-post-title">{blog.title}</h1>
+              <div className="blog-post-meta">
+                <div className="blog-post-info">
+                  <span className="blog-post-date">
+                    <i className="far fa-calendar"></i>
+                    {new Date(blog.date).toLocaleDateString()}
+                  </span>
+                  <span className="blog-post-views">
+                    <i className="far fa-eye"></i>
+                    {blog.views} Views
+                  </span>
+                  <span className="blog-post-likes">
+                    <i className="far fa-heart"></i>
+                    {blog.likes} Likes
+                  </span>
+                </div>
               </div>
-            </div>
-            <div className="blog-post-info">
-              <span className="blog-post-date">{new Date(blogPost.date).toLocaleDateString()}</span>
-              <span className="blog-post-read-time">{blogPost.readTime}</span>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div className="blog-post-content">
-        <div className="blog-post-body" dangerouslySetInnerHTML={{ __html: blogPost.content }}></div>
-        
-        <div className="blog-post-tags">
-          {blogPost.tags.map(tag => (
-            <span key={tag} className="blog-post-tag">#{tag}</span>
-          ))}
-        </div>
-        
-        <div className="blog-post-share">
-          <h3>Share this article</h3>
-          <div className="share-buttons">
-            <button className="share-button twitter">
-              <i className="fab fa-twitter"></i>
+
+        <div className="blog-post-content">
+          <div className="blog-post-summary">
+            <p>{blog.summary}</p>
+          </div>
+          
+          <div className="blog-post-body"
+            dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(blog.description) }}
+          ></div>
+
+          <div className="blog-post-actions">
+            <button 
+              className={`like-button ${liked ? 'liked' : ''}`}
+              onClick={handleLike}
+              disabled={liked}
+            >
+              <i className={`${liked ? 'fas' : 'far'} fa-heart`}></i>
+              {liked ? 'Liked' : 'Like'}
             </button>
-            <button className="share-button facebook">
-              <i className="fab fa-facebook-f"></i>
+            <button className="share-button" onClick={handleShare}>
+              <i className="fas fa-share-alt"></i>
+              Share
             </button>
-            <button className="share-button linkedin">
-              <i className="fab fa-linkedin-in"></i>
-            </button>
+          </div>
+
+          <div className="blog-post-navigation">
+            <Link to="/blog" className="back-to-blog">
+              <i className="fas fa-arrow-left"></i>
+              Back to Blog
+            </Link>
           </div>
         </div>
       </div>
-      
-      <div className="related-posts">
-        <h2>Related Articles</h2>
-        <div className="related-posts-grid">
-          {relatedPosts.map(post => (
-            <div key={post.id} className="related-post-card">
-              <div className="related-post-image" style={{ backgroundImage: `url(${post.image})` }}>
-                <div className="related-post-category">{post.category}</div>
-              </div>
-              <div className="related-post-content">
-                <h3 className="related-post-title">{post.title}</h3>
-                <p className="related-post-excerpt">{post.excerpt}</p>
-                <Link to={`/blog/${post.id}`} className="related-post-link">
-                  Read More <i className="fas fa-arrow-right"></i>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="blog-post-navigation">
-        <Link to="/blog" className="back-to-blog">
-          <i className="fas fa-arrow-left"></i> Back to Blog
-        </Link>
-      </div>
-    </div>
+
+    </>
+
   );
 };
 
-export default BlogPost; 
+export default BlogPost;

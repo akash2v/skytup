@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { FaGoogle, FaFacebook, FaTwitter } from 'react-icons/fa';
 import './Auth.css';
 
@@ -40,88 +41,128 @@ const Login = () => {
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    // This would be replaced with actual social login logic
-    console.log(`Logging in with ${provider}`);
+  const handleSocialLogin = async (provider) => {
+    try {
+      setIsLoading(true);
+      // This would be replaced with actual social login logic
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(`Logging in with ${provider}`);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(`${provider} login error:`, error);
+      setError(`Failed to login with ${provider}. Please try again.`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Welcome Back</h2>
-        <p className="auth-subtitle">Please login to your account</p>
+    <>
+      <Helmet>
+        <title>Login to Skytup</title>
+        <meta name="description" content="Sign in to your Skytup account to access personalized tech tutorials, coding resources, and connect with the developer community." />
+        <meta name="robots" content="noindex, nofollow" />
+        
+        {/* OpenGraph tags */}
+        <meta property="og:title" content="Login to Skytup" />
+        <meta property="og:description" content="Sign in to access your Skytup account" />
+        <meta property="og:type" content="website" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Login to Skytup" />
+        <meta name="twitter:description" content="Sign in to access your Skytup account" />
+      </Helmet>
 
-        {error && <div className="auth-error">{error}</div>}
+      <div className="auth-container">
+        <div className="auth-card">
+          <h2>Welcome Back</h2>
+          <p className="auth-subtitle">Please login to your account</p>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-            />
+          {error && <div className="auth-error">{error}</div>}
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                placeholder="Enter your password"
+              />
+            </div>
+
+            <div className="form-options">
+              <label className="remember-me">
+                <input type="checkbox" /> Remember me
+              </label>
+              <Link to="/forgot-password" className="forgot-password">
+                Forgot Password?
+              </Link>
+            </div>
+
+            <button type="submit" className="auth-button" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+
+          <div className="auth-divider">
+            <span>Or continue with</span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter your password"
-            />
+          <div className="social-login">
+            <button 
+              className="social-button google"
+              onClick={() => handleSocialLogin('Google')}
+              disabled={isLoading}
+            >
+              <FaGoogle className="social-icon" />
+              <span>Google</span>
+            </button>
+            <button 
+              className="social-button facebook"
+              onClick={() => handleSocialLogin('Facebook')}
+              disabled={isLoading}
+            >
+              <FaFacebook className="social-icon" />
+              <span>Facebook</span>
+            </button>
+            <button 
+              className="social-button twitter"
+              onClick={() => handleSocialLogin('Twitter')}
+              disabled={isLoading}
+            >
+              <FaTwitter className="social-icon" />
+              <span>Twitter</span>
+            </button>
           </div>
 
-          <div className="form-options">
-            <label className="remember-me">
-              <input type="checkbox" /> Remember me
-            </label>
-            <Link to="/forgot-password" className="forgot-password">
-              Forgot Password?
+          <p className="auth-redirect">
+            Don't have an account?{" "}
+            <Link to="/register" className="auth-link">
+              Register
             </Link>
-          </div>
-
-          <button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <div className="auth-divider">
-          <span>Or continue with</span>
+          </p>
         </div>
-
-        <div className="social-login">
-          <button className="social-button google">
-            <FaGoogle className="social-icon" />
-            <span>Google</span>
-          </button>
-          <button className="social-button facebook">
-            <FaFacebook className="social-icon" />
-            <span>Facebook</span>
-          </button>
-          <button className="social-button twitter">
-            <FaTwitter className="social-icon" />
-            <span>Twitter</span>
-          </button>
-        </div>
-
-        <p className="auth-redirect">
-          Don't have an account?{" "}
-          <Link to="/register" className="auth-link">
-            Register
-          </Link>
-        </p>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Login; 
+export default Login;

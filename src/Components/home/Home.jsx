@@ -1,11 +1,29 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import Hero from '../header/Hero';
 // import './Home.css';
 
 const Home = () => {
   return (
     <div className="home">
-      {/* <Hero /> */}
+      <Helmet>
+        <title>Skytup - Learn Programming & Technology</title>
+        <meta name="description" content="Explore tutorials, articles, and resources on programming, development, and technology. Join our community of developers and tech enthusiasts." />
+        <meta name="keywords" content="programming,tutorials,technology,development,coding,learn to code" />
+        
+        {/* OpenGraph tags */}
+        <meta property="og:title" content="Skytup - Learn Programming & Technology" />
+        <meta property="og:description" content="Explore tutorials, articles, and resources on programming, development, and technology. Join our community of developers and tech enthusiasts." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://skytup.com/home-preview.jpg" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Skytup - Learn Programming & Technology" />
+        <meta name="twitter:description" content="Explore tutorials, articles, and resources on programming, development, and technology. Join our community of developers and tech enthusiasts." />
+        <meta name="twitter:image" content="https://skytup.com/home-preview.jpg" />
+      </Helmet>
+
       <main className="main-content">
                 <Hero />
                 <section className="trending-section animate__animated animate__fadeIn">
@@ -323,4 +341,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;
