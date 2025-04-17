@@ -10,7 +10,6 @@ import Privacy from "./Components/pages/Privacy";
 import Contact from "./Components/pages/Contact";
 import Blog from "./Components/blog/Blog";
 import BlogPost from "./Components/blog/BlogPost";
-import Hero from "./Components/header/Hero";
 import "./App.css";
 import ConstructionModal from "./Components/modals/ConstructionModal";
 import Home from "./Components/home/Home";
@@ -18,6 +17,7 @@ import Home from "./Components/home/Home";
 function App() {
   // Mock user data - replace with actual user data from your auth system
   const [user] = useState(null);
+  const isDevelopmentMode = import.meta.env.VITE_DEVELOPMENT_MODE === "true";
   // const [construction, setConstruction] = useState(true)
 
   return (
@@ -25,7 +25,7 @@ function App() {
       <div className="app-container">
         <Navbar user={user} title="Skytup" />
        
-        {/* <ConstructionModal /> */}
+        {isDevelopmentMode && <ConstructionModal />}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
