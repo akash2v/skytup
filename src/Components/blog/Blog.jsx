@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './Blog.css';
 
+const API_ENDPOINT = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+
 function BlogInfinite() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -11,7 +13,7 @@ function BlogInfinite() {
   const loadData = async (pageNum, limitCount) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:3000/api/posts?page=${pageNum}&limit=${limitCount}`);
+      const response = await fetch(`${API_ENDPOINT}/api/posts?page=${pageNum}&limit=${limitCount}`);
       const data = await response.json();
       
       if (data.data.length === 0) {
@@ -33,7 +35,7 @@ function BlogInfinite() {
     if (hasMore) {
       loadData(page, limit);
     }
-  }, [page, hasMore]);
+  }, [page, hasMore, limit]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,4 +128,4 @@ function BlogInfinite() {
   );
 }
 
-export default BlogInfinite; 
+export default BlogInfinite;

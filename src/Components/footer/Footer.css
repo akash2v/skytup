@@ -1,11 +1,5 @@
 .foot {
-  z-index: 90;
-  /* position: absolute; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #232F3E;
+    background: #232F3E;
   color: white;
   width: 100%;
   padding: 5px;
