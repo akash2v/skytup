@@ -334,10 +334,7 @@ nav {
 @media (max-width: 768px) {
   nav {
     padding: 0.8rem 1rem;
-  }
-  
-  body {
-    padding-top: 60px; /* Smaller padding for mobile */
+    position: fixed;
   }
   
   .menu {
@@ -362,12 +359,17 @@ nav {
   }
 
   .profile-button {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    z-index: 1000; /* Ensure it stays above other elements */
   }
 
   .profile-button::after {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .menu {
+    overflow-y: auto; /* Add scrolling for overflowing content */
   }
 }
