@@ -18,7 +18,7 @@ const Projects = () => {
       tags: ["node.js", "html", "css", "js"],
       category: "development",
       actionType: "demo",
-      actionUrl: "#https://anymo.skytup.com",
+      actionUrl: "https://anymo.skytup.com",
       stars: 2,
       downloads: 0,
     },
@@ -212,8 +212,8 @@ const Projects = () => {
                 <h3>{project.title}</h3>
                 <p>{project.summary}</p>
                 <div className="project-tags">
-                  {project.tags.map((tag, index) => (
-                    <span key={index} className="tag">
+                  {project.tags.map((tag) => (
+                    <span key={`${project.id}-${tag}`} className="tag">
                       {tag}
                     </span>
                   ))}

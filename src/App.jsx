@@ -13,6 +13,7 @@ import Blog from "./Components/blog/Blog";
 import BlogPost from "./Components/blog/BlogPost";
 import NotFound from "./Components/pages/NotFound";
 import Projects from "./Components/pages/Projects";
+import ScrollToTop from "./Components/utils/ScrollToTop";
 import "./App.css";
 import ConstructionModal from "./Components/modals/ConstructionModal";
 import Home from "./Components/home/Home";
@@ -61,6 +62,7 @@ function App() {
         <Navbar user={user} title="Skytup" />
         
         {isDevelopmentMode && <ConstructionModal />}
+        <ScrollToTop />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

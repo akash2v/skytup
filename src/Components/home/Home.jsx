@@ -76,8 +76,8 @@ const Home = () => {
           <div className="keywords-container">
             <h2>Popular Topics</h2>
             <div className="keywords-list">
-              {['JavaScript', 'Python', 'React', 'Node.js', 'CSS', 'HTML', 'TypeScript', 'Git', 'Docker', 'AWS'].map((keyword, index) => (
-                <a key={index} href={`/blog/?k=${encodeURIComponent(keyword)}`} className="keyword">
+              {['JavaScript', 'Python', 'React', 'Node.js', 'CSS', 'HTML', 'TypeScript', 'Git', 'Docker', 'AWS'].map(keyword => (
+                <a key={keyword} href={`/blog/?k=${encodeURIComponent(keyword)}`} className="keyword">
                   {keyword}
                 </a>
               ))}
