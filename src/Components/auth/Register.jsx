@@ -131,7 +131,7 @@ const Register = () => {
             </button>
           </form>
 
-          <div className="auth-divider">
+          {/* <div className="auth-divider">
             <span>Or continue with</span>
           </div>
 
@@ -144,11 +144,7 @@ const Register = () => {
               <FaFacebook className="social-icon" />
               <span>Facebook</span>
             </button>
-            <button className="social-button twitter">
-              <FaTwitter className="social-icon" />
-              <span>Twitter</span>
-            </button>
-          </div>
+          </div> */}
 
           <p className="auth-redirect">
             Already have an account?{" "}

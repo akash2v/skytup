@@ -143,14 +143,7 @@ const Login = () => {
               <FaFacebook className="social-icon" />
               <span>Facebook</span>
             </button>
-            <button 
-              className="social-button twitter"
-              onClick={() => handleSocialLogin('Twitter')}
-              disabled={isLoading}
-            >
-              <FaTwitter className="social-icon" />
-              <span>Twitter</span>
-            </button>
+            
           </div>
 
           <p className="auth-redirect">

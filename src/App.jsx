@@ -11,6 +11,8 @@ import Privacy from "./Components/pages/Privacy";
 import Contact from "./Components/pages/Contact";
 import Blog from "./Components/blog/Blog";
 import BlogPost from "./Components/blog/BlogPost";
+import NotFound from "./Components/pages/NotFound";
+import Projects from "./Components/pages/Projects";
 import "./App.css";
 import ConstructionModal from "./Components/modals/ConstructionModal";
 import Home from "./Components/home/Home";
@@ -67,8 +69,10 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/blog/:alias" element={<BlogPost />} />
           <Route path="/" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </div>

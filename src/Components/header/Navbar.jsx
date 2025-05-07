@@ -36,7 +36,7 @@ function Navbar(props) {
                 {/* <li><a href="#"><i className="fas fa-home"></i>Home</a></li> */}
                 <li><Link to="/"><i className="fas fa-home"></i>Home</Link></li>
                 <li><Link to="/about"><i className="fas fa-info-circle"></i>About</Link></li>
-                <li><Link to="/services"><i className="fas fa-tools"></i>Services</Link></li>
+                <li><Link to="/projects"><i className="fas fa-code"></i>Projects</Link></li>
                 <li><Link to="/blog"><i className="fas fa-briefcase"></i>Blog</Link></li>
                 <li><Link to="/contact"><i className="fas fa-envelope"></i>Contact</Link></li>
             </ul>

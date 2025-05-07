@@ -11,6 +11,7 @@ function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,78 +38,65 @@ function Contact() {
     }, 1500);
   };
 
+  const handleSpeak = () => {
+    if (!isSpeaking) {
+      const text = "Hello there! I'm Akash, the creator of this website. I hope you're finding our services helpful and enjoying your experience. If you have any questions, need assistance, or want to share feedback, we're here to help.";
+      const utterance = new SpeechSynthesisUtterance(text);
+      setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  };
+
   return (
     <>
       <Helmet>
-        <title>Contact Skytup - Get In Touch With Us</title>
-        <meta name="description" content="Have questions or feedback? Contact the Skytup team. We're here to help with your tech learning journey and programming needs." />
-        <meta name="keywords" content="contact skytup,tech support,developer help,programming assistance" />
+        <title>Contact Us | Skytup</title>
+        <meta name="description" content="Reach out to Skytup, founded in 2021 by Akash. Discover more about our services and products, and learn how to get in touch with our team for inquiries, support, or partnership opportunities. We're here to help you!" />
         
         {/* OpenGraph tags */}
-        <meta property="og:title" content="Contact Skytup - Get In Touch With Us" />
-        <meta property="og:description" content="Have questions or feedback? Contact the Skytup team. We're here to help with your tech learning journey and programming needs." />
+        <meta property="og:title" content="Contact Us | Skytup" />
+        <meta property="og:description" content="Reach out to Skytup, founded in 2021 by Akash. Get in touch with our team for inquiries, support, or partnership opportunities." />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://skytup.com/contact-preview.jpg" />
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Contact Skytup - Get In Touch With Us" />
-        <meta name="twitter:description" content="Have questions or feedback? Contact the Skytup team. We're here to help with your tech learning journey and programming needs." />
+        <meta name="twitter:title" content="Contact Us | Skytup" />
+        <meta name="twitter:description" content="Reach out to Skytup, founded in 2021 by Akash. Get in touch with our team for inquiries, support, or partnership opportunities." />
         <meta name="twitter:image" content="https://skytup.com/contact-preview.jpg" />
       </Helmet>
 
+      <button 
+        className="speak-button"
+        onClick={handleSpeak}
+        aria-label={isSpeaking ? "Stop speaking" : "Start speaking"}
+      >
+        <i className={`fas fa-volume-${isSpeaking ? 'down' : 'up'}`}></i>
+      </button>
+
       <div className="contact-container">
         <div className="contact-header animate__animated animate__fadeInDown">
-          <h1>Contact Us</h1>
-          <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+          <div className="header-content">
+            <h1>Contact Us</h1>
+            <div className="header-text">
+              <p>
+                Hello there! I'm Akash, the creator of this website. I hope you're finding our services helpful and enjoying your experience.
+              </p>
+              <p>
+                If you have any questions, need assistance, or want to share feedback, we're here to help. You can reach out to us through the contact form below, or for business inquiries, please email us at <a href="mailto:support@skytup.com">support@skytup.com</a>.
+              </p>
+              <p>
+                Your feedback is valuable and helps us improve. If you've encountered any issues or have suggestions, please let us know. We're committed to providing the best possible experience for you.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="contact-content">
-          <div className="contact-info animate__animated animate__fadeInLeft">
-            <div className="info-card">
-              <div className="icon-circle">
-                <i className="fas fa-map-marker-alt"></i>
-              </div>
-              <h3>Our Location</h3>
-              <p>123 Tech Street, Cyber City, Digital State, 12345</p>
-            </div>
-            
-            <div className="info-card">
-              <div className="icon-circle">
-                <i className="fas fa-envelope"></i>
-              </div>
-              <h3>Email Us</h3>
-              <p>contact@skytup.com</p>
-              <p>support@skytup.com</p>
-            </div>
-            
-            <div className="info-card">
-              <div className="icon-circle">
-                <i className="fas fa-phone-alt"></i>
-              </div>
-              <h3>Call Us</h3>
-              <p>+1 (123) 456-7890</p>
-              <p>+1 (987) 654-3210</p>
-            </div>
-            
-            <div className="social-connect">
-              <h3>Connect With Us</h3>
-              <div className="social-icons">
-                <a href="https://www.facebook.com/profile.php?id=100030124935456" target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://www.twitter.com/skythecoder" target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-x-twitter"></i>
-                </a>
-                <a href="https://www.instagram.com/developer_akash/" target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.linkedin.com/company/skytup" target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-linkedin-in"></i>
-                </a>
-              </div>
-            </div>
-          </div>
           
           <div className="contact-form-container animate__animated animate__fadeInRight">
             {submitted ? (
@@ -124,30 +112,32 @@ function Contact() {
               <form className="contact-form" onSubmit={handleSubmit}>
                 <h2>Get In Touch</h2>
                 
-                <div className="form-group">
-                  <label htmlFor="name">Your Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter your name"
-                    required
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="email">Your Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter your email"
-                    required
-                  />
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label htmlFor="name">Your Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Enter your name"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="email">Your Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
                 </div>
                 
                 <div className="form-group">
@@ -176,8 +166,6 @@ function Contact() {
                   ></textarea>
                 </div>
 
-                <div className="g-recaptcha" data-sitekey="your-recaptcha-site-key"></div>
-                
                 <button type="submit" className="submit-btn" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
@@ -192,23 +180,7 @@ function Contact() {
           </div>
         </div>
 
-        <div className="map-container animate__animated animate__fadeInUp">
-          <h2>Find Us Here</h2>
-          <div className="map">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.3059445135!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1659012478168!5m2!1sen!2sin"
-              width="100%"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Skytup Location"
-            ></iframe>
-          </div>
-        </div>
-        
-        <div className="faq-section animate__animated animate__fadeIn">
+        {/* <div className="faq-section animate__animated animate__fadeIn">
           <h2>Frequently Asked Questions</h2>
           <div className="faq-container">
             <div className="faq-item">
@@ -228,7 +200,7 @@ function Contact() {
               <p>You can request a custom project by filling out the contact form above with your project details, and our team will get back to you with a quote.</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

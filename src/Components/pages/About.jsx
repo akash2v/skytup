@@ -1,64 +1,82 @@
-import React from 'react';
-import { Helmet } from 'react-helmet';
-import './About.css';
+import React from "react";
+import { Helmet } from "react-helmet";
+import "./About.css";
 
 const About = () => {
   return (
     <>
       <Helmet>
         <title>About Skytup - Our Story & Mission</title>
-        <meta name="description" content="Learn about Skytup's journey, our mission to empower developers, and how we're shaping the future of tech education." />
-        <meta name="keywords" content="about skytup,tech education,programming community,developer platform" />
-        
+        <meta
+          name="description"
+          content="Learn about Skytup's journey, our mission to empower developers, and how we're shaping the future of tech education."
+        />
+        <meta
+          name="keywords"
+          content="about skytup,tech education,programming community,developer platform"
+        />
+
         {/* OpenGraph tags */}
-        <meta property="og:title" content="About Skytup - Our Story & Mission" />
-        <meta property="og:description" content="Learn about Skytup's journey, our mission to empower developers, and how we're shaping the future of tech education." />
+        <meta
+          property="og:title"
+          content="About Skytup - Our Story & Mission"
+        />
+        <meta
+          property="og:description"
+          content="Learn about Skytup's journey, our mission to empower developers, and how we're shaping the future of tech education."
+        />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://skytup.com/about-preview.jpg" />
-        
+        <meta
+          property="og:image"
+          content="https://skytup.com/about-preview.jpg"
+        />
+
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="About Skytup - Our Story & Mission" />
-        <meta name="twitter:description" content="Learn about Skytup's journey, our mission to empower developers, and how we're shaping the future of tech education." />
-        <meta name="twitter:image" content="https://skytup.com/about-preview.jpg" />
+        <meta
+          name="twitter:title"
+          content="About Skytup - Our Story & Mission"
+        />
+        <meta
+          name="twitter:description"
+          content="Learn about Skytup's journey, our mission to empower developers, and how we're shaping the future of tech education."
+        />
+        <meta
+          name="twitter:image"
+          content="https://skytup.com/about-preview.jpg"
+        />
       </Helmet>
 
       <div className="about-container">
         <div className="about-header">
           <h1>About Us</h1>
-          <p className="subtitle">
-            Dive into the story of Skytup and its founder, Akash, as we showcase the innovative technology shaping our journey.
-          </p>
         </div>
-        
+
         <div className="about-content">
           <div className="content-section">
-            <p>
-              Welcome to Skytup, your premier destination for cutting-edge educational content. 
-              We are dedicated to delivering top-tier tech information, ensuring you remain at 
-              the forefront of the educational landscape.
+            <p className="subtitle">
+              Discover the heart of Skytup and meet our founder, <b>Akash Vishwakarma</b>, as we
+              unveil the groundbreaking technology driving our mission.
             </p>
             <p>
-              Founded in 2021 by Akash, Skytup has undergone significant growth and evolution 
-              since its inception in the vibrant landscape of India. Akash's profound passion 
-              for coding and programming laid the foundations for this venture.
+              At Skytup, we’re passionate about transforming education through
+              innovation. Our mission is to provide you with the highest-quality
+              tech content, keeping you ahead in an ever-evolving educational
+              world.
             </p>
             <p>
-              We invite you to immerse yourself in our comprehensive services, meticulously crafted 
-              to empower and enrich your educational journey. We trust you'll find our offerings as 
-              gratifying as we find creating them. Should you have any inquiries or feedback, 
-              please feel free to reach out. Your satisfaction is our utmost priority.
+              <b>Launched in 2021 </b> by Akash in the dynamic hub of India, Skytup was
+              born from a deep love for coding and a vision to redefine
+              learning. Since then, we’ve grown into a trusted resource for
+              learners everywhere, constantly evolving to meet your needs.
             </p>
-            <div className="youtube-subscribe">
-              <h3>Subscribe to Our Channel</h3>
-              <div 
-                className="g-ytsubscribe" 
-                data-channelid="UC6vrqOqpd8_92ldIhlXpw1g" 
-                data-layout="full" 
-                data-theme="dark" 
-                data-count="hidden">
-              </div>
-            </div>
+            <p>
+              Explore our carefully designed services, created to inspire and
+              elevate your learning experience. We take pride in crafting
+              content that’s as rewarding to use as it is to create. Have
+              questions or ideas? We’d love to hear from you—your feedback is
+              what drives us to improve.
+            </p>
           </div>
         </div>
       </div>
